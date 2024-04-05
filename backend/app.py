@@ -5,7 +5,7 @@ import pandas as pd
 from pyparsing import wraps
 from model import recommend_songs
 import jwt
-import datetime
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///songs.db'
@@ -20,18 +20,24 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), nullable=False, unique=True)
     password = db.Column(db.String(100), nullable=False)
-    songs = db.relationship('Song', backref='user', lazy='dynamic')
+    recommendations = db.relationship('Recommendation', backref='user', lazy='dynamic')
 
-# Song model
-class Song(db.Model):
+class Recommendation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    year = db.Column(db.Integer, nullable=False)
+    song_name = db.Column(db.String(100), nullable=False)
+    song_year = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+def generate_access_token(user_id):
+    payload = {
+        'id': user_id,
+        'exp': datetime.utcnow() + timedelta(minutes=30)  # Token expiration time
+    }
+    return jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256')
 
 def token_required(f):
     @wraps(f)
@@ -81,7 +87,8 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and user.password == password:
             login_user(user)
-            return redirect(url_for('home'))
+            access_token = generate_access_token(user.id)
+            return jsonify({'access_token': access_token})
         else:
             flash('Invalid username or password', 'danger')
     return render_template('login.html')
@@ -90,16 +97,20 @@ def login():
 @login_required
 def home():
     if request.method == 'POST':
-        song_name = request.form['song_name']
-        song_year = int(request.form['song_year'])
+        song_name = request.json['song_name']
+        song_year = int(request.json['song_year'])
         song_list = [{'name': song_name, 'year': song_year}]
         data = pd.read_csv("./input/data.csv")
         recommended_songs = recommend_songs(song_list, data)
+
         # Store recommended songs in the database
-        for song in recommended_songs:
-            new_song = Song(name=song['name'], year=song['year'], user_id=current_user.id)
-            db.session.add(new_song)
+        for song in recommended_songs[:10]:  # Store only the top 10 recommendations
+            new_recommendation = Recommendation(song_name=song['name'], song_year=song['year'], user_id=current_user.id)
+            print(new_recommendation)
+            db.session.add(new_recommendation)
         db.session.commit()
+        db.session.remove()
+
         return render_template('result.html', songs=recommended_songs)
     return render_template('index.html')
 
