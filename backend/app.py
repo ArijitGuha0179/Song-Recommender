@@ -57,8 +57,8 @@ def register():
         print('lol')
         print(request)
         print('lol')
-        username = request.form['username']
-        password = request.form['password']
+        username = request.json["username"]
+        password = request.json["password"]
 
         if User.query.filter_by(username=username).first() is not None:
             flash('Username already exists', 'danger')
@@ -76,8 +76,8 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        username = request.json['username']
+        password = request.json['password']
         user = User.query.filter_by(username=username).first()
         if user and user.password == password:
             login_user(user)
