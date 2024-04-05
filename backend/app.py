@@ -2,6 +2,7 @@ from flask import jsonify,Flask, render_template, request, redirect, url_for, fl
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import pandas as pd
+from pyparsing import wraps
 from model import recommend_songs
 import jwt
 import datetime
@@ -9,6 +10,7 @@ import datetime
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///songs.db'
 app.config['SECRET_KEY'] = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+app.config['WTF_CSRF_ENABLED'] = False
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
@@ -52,7 +54,9 @@ def token_required(f):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        print(request.form)
+        print('lol')
+        print(request)
+        print('lol')
         username = request.form['username']
         password = request.form['password']
 
