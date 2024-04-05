@@ -1,4 +1,4 @@
-from flask import jsonify,Flask, render_template, request, redirect, url_for, flash
+from flask import jsonify,Flask, render_template, request, redirect, url_for, flash,g
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import pandas as pd
@@ -6,6 +6,7 @@ from pyparsing import wraps
 from model import recommend_songs
 import jwt
 from datetime import datetime, timedelta
+import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///songs.db'
@@ -34,8 +35,7 @@ def load_user(user_id):
 
 def generate_access_token(user_id):
     payload = {
-        'id': user_id,
-        'exp': datetime.utcnow() + timedelta(minutes=30)  # Token expiration time
+        'id': user_id
     }
     return jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256')
 
@@ -47,14 +47,15 @@ def token_required(f):
             token = request.headers['x-access-token']
         if not token:
             return jsonify({'message': 'Token is missing!'}), 401
-
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
             current_user = User.query.filter_by(id=data['id']).first()
+            if not current_user:
+                return jsonify({'message': 'Invalid token!'}), 401
+            g.current_user = current_user
         except:
             return jsonify({'message': 'Token is invalid!'}), 401
-
-        return f(current_user, *args, **kwargs)
+        return f(*args, **kwargs)
     return decorated
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -94,22 +95,34 @@ def login():
     return render_template('login.html')
 
 @app.route('/', methods=['GET', 'POST'])
-@login_required
+@token_required
+
+@token_required
 def home():
     if request.method == 'POST':
-        song_name = request.json['song_name']
-        song_year = int(request.json['song_year'])
+        try:
+            # Decode the byte string to a regular string
+            json_str = request.data.decode('utf-8')
+
+            # Parse the JSON data
+            json_data = json.loads(json_str)
+            song_name = json_data['name']
+            song_year = json_data['year']
+        except (UnicodeDecodeError, json.JSONDecodeError) as e:
+            return jsonify({'error': str(e)}), 400
+
         song_list = [{'name': song_name, 'year': song_year}]
         data = pd.read_csv("./input/data.csv")
         recommended_songs = recommend_songs(song_list, data)
+        print(recommended_songs)
 
         # Store recommended songs in the database
         for song in recommended_songs[:10]:  # Store only the top 10 recommendations
-            new_recommendation = Recommendation(song_name=song['name'], song_year=song['year'], user_id=current_user.id)
+            new_recommendation = Recommendation(song_name=song['name'], song_year=song['year'], user_id=g.current_user.id)
             print(new_recommendation)
             db.session.add(new_recommendation)
         db.session.commit()
-        db.session.remove()
+        # db.session.remove()
 
         return render_template('result.html', songs=recommended_songs)
     return render_template('index.html')
