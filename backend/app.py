@@ -27,6 +27,7 @@ class Recommendation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     song_name = db.Column(db.String(100), nullable=False)
     song_year = db.Column(db.Integer, nullable=False)
+    artist_name = db.Column(db.String(120), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 @login_manager.user_loader
@@ -96,8 +97,6 @@ def login():
 
 @app.route('/', methods=['GET', 'POST'])
 @token_required
-
-@token_required
 def home():
     if request.method == 'POST':
         try:
@@ -114,12 +113,13 @@ def home():
         song_list = [{'name': song_name, 'year': song_year}]
         data = pd.read_csv("./input/data.csv")
         recommended_songs = recommend_songs(song_list, data)
-        print(recommended_songs)
+        # print(recommended_songs)
 
         # Store recommended songs in the database
         for song in recommended_songs[:10]:  # Store only the top 10 recommendations
-            new_recommendation = Recommendation(song_name=song['name'], song_year=song['year'], user_id=g.current_user.id)
-            print(new_recommendation)
+            # print(song)
+            new_recommendation = Recommendation(song_name=song['name'], song_year=song['year'],artist_name=song['artists'], user_id=g.current_user.id)
+            # print(new_recommendation)
             db.session.add(new_recommendation)
         db.session.commit()
         # db.session.remove()
