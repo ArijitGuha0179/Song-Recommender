@@ -102,27 +102,24 @@ def home():
         try:
             # Decode the byte string to a regular string
             json_str = request.data.decode('utf-8')
-
             # Parse the JSON data
             json_data = json.loads(json_str)
             song_name = json_data['name']
             song_year = json_data['year']
+            song_artist = json_data['artists']
         except (UnicodeDecodeError, json.JSONDecodeError) as e:
             return jsonify({'error': str(e)}), 400
 
-        song_list = [{'name': song_name, 'year': song_year}]
+        song_list = [{'name': song_name, 'year': song_year, 'artists': song_artist}]
         data = pd.read_csv("./input/data.csv")
         recommended_songs = recommend_songs(song_list, data)
-        # print(recommended_songs)
 
         # Store recommended songs in the database
         for song in recommended_songs[:10]:  # Store only the top 10 recommendations
-            # print(song)
-            new_recommendation = Recommendation(song_name=song['name'], song_year=song['year'],artist_name=song['artists'], user_id=g.current_user.id)
-            # print(new_recommendation)
+            new_recommendation = Recommendation(song_name=song['name'], song_year=song['year'],
+                                                artist_name=song['artists'], user_id=g.current_user.id)
             db.session.add(new_recommendation)
         db.session.commit()
-        # db.session.remove()
 
         return render_template('result.html', songs=recommended_songs)
     return render_template('index.html')
