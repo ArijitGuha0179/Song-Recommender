@@ -98,7 +98,11 @@ def login():
 @app.route('/', methods=['GET', 'POST'])
 @token_required
 def home():
-    if request.method == 'POST':
+    if request.method == 'OPTIONS':
+        # Handle the OPTIONS request
+        response = {'Access-Control-Allow-Methods': 'GET, POST'}
+        return response, 200
+    elif request.method == 'POST':
         try:
             # Decode the byte string to a regular string
             json_str = request.data.decode('utf-8')
