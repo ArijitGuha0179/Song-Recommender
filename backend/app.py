@@ -7,8 +7,10 @@ from model import recommend_songs
 import jwt
 from datetime import datetime, timedelta
 import json
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///songs.db'
 app.config['SECRET_KEY'] = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
 app.config['WTF_CSRF_ENABLED'] = False
@@ -119,13 +121,15 @@ def home():
         recommended_songs = recommend_songs(song_list, data)
 
         # Store recommended songs in the database
-        for song in recommended_songs[:10]:  # Store only the top 10 recommendations
+        recommendations = []
+        for song in recommended_songs[:11]:  # Store only the top 10 recommendations
             new_recommendation = Recommendation(song_name=song['name'], song_year=song['year'],
                                                 artist_name=song['artists'], user_id=g.current_user.id)
             db.session.add(new_recommendation)
+            recommendations.append(song)
         db.session.commit()
 
-        return render_template('result.html', songs=recommended_songs)
+        return jsonify(recommendations), 200
     return render_template('index.html')
 
 @app.route('/logout')

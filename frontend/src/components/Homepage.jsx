@@ -50,6 +50,7 @@ const Homepage = () => {
         },
       });
       console.log("Song recommendation submitted successfully");
+      console.log(response);
       setRecommendedSongs(await response.data);
       console.log(await response.data);
     } catch (error) {
