@@ -1,5 +1,5 @@
 # Use the official Python image as the base image
-FROM python:latest
+FROM python3:latest
 
 # Set the working directory
 WORKDIR /app
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8223
 
 # Start the Flask app
-CMD ["python", "app.py"]
+CMD ["python3", "app.py"]
