@@ -21,6 +21,7 @@ const LoginPage = () => {
     try {
       const response = await axios.post(`${baseURL}/login`, userDetails);
       const token = await response.data.access_token;
+      console.log(token)
       login(token);
       navigate("/");
     } catch (error) {

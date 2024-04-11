@@ -19,10 +19,11 @@ const top10Songs = [
   { label: "Stay Away" },
 ];
 
+const temp = "['Breaking Benjamin', ' Florida Georgia Line', ' Florida Georgia Line']";
+
 const Homepage = () => {
   const [selectedDate, handleDateChange] = useState(null);
-  const [selectedSong, handleSelectedSong] = useState(top10Songs[0]);
-  const [inputValue, setInputValue] = useState("");
+  const [songName, setSongName] = useState("");
   const [recommendedSongs, setRecommendedSongs] = useState([]);
   const [artist, setArtist] = useState("");
   const navigate = useNavigate();
@@ -32,14 +33,13 @@ const Homepage = () => {
   const handleSubmit = async () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
-      console.log(accessToken);
       if (!accessToken) {
         // If the access token is not found, redirect the user to the login page
         navigate("/login");
         return;
       }
       const song_details = {
-        name: inputValue,
+        name: songName,
         year: selectedDate ? selectedDate.year() : null,
         artists: artist,
       };
@@ -50,12 +50,12 @@ const Homepage = () => {
         },
       });
       console.log("Song recommendation submitted successfully");
-      console.log(response);
       setRecommendedSongs(await response.data);
       console.log(await response.data);
     } catch (error) {
       // Handle error
       console.error("Error submitting song recommendation:", error);
+      alert("Please try again");
     }
   };
 
@@ -99,15 +99,12 @@ const Homepage = () => {
           }}>
           <Autocomplete
             disablePortal
+            freeSolo
             id="combo-box-demo"
             options={top10Songs}
-            value={selectedSong}
-            onChange={(event, newValue) => {
-              handleSelectedSong(newValue);
-            }}
-            inputValue={inputValue}
+            inputValue={songName}
             onInputChange={(event, newInputValue) => {
-              setInputValue(newInputValue);
+              setSongName(newInputValue);
             }}
             sx={{ width: 300 }}
             renderInput={(params) => <TextField {...params} label="Search Song" />}
@@ -193,7 +190,20 @@ const SongCard = ({ song }) => {
           {song.name}
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Artists: song.artists
+          Artists:{" "}
+          <Box
+            sx={{
+              display: "flex",
+            }}>
+            {eval(song.artists).map((element, index) => {
+              console.log(element);
+              return (
+                <Typography variant="body1" color="text.secondary" key={index}>
+                  {element}
+                </Typography>
+              );
+            })}
+          </Box>
         </Typography>
       </Box>
       <Typography variant="h6">{song.year}</Typography>

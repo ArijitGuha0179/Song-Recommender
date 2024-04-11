@@ -119,7 +119,7 @@ def recommend_songs(song_list, spotify_data, n_songs=12):
     rec_songs = rec_songs[~rec_songs['name'].isin(song_dict['name'])]
     return rec_songs[metadata_cols].to_dict(orient='records')
 
-d = recommend_songs([{"name": "The Diary of Jane", "artists":"Breaking Benjamin","year":2010}],  data)
+d = recommend_songs([{"name": "Perfect", "artists":"Ed sheeran","year":2010}],  data)
 
 print(d)
 

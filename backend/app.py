@@ -122,7 +122,7 @@ def home():
 
         # Store recommended songs in the database
         recommendations = []
-        for song in recommended_songs[:11]:  # Store only the top 10 recommendations
+        for song in recommended_songs[:12]:  
             new_recommendation = Recommendation(song_name=song['name'], song_year=song['year'],
                                                 artist_name=song['artists'], user_id=g.current_user.id)
             db.session.add(new_recommendation)
