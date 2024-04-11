@@ -21,4 +21,4 @@ EXPOSE 8223
 # ENV FLASK_ENV=production
 
 # Start the Flask app on the specified port
-CMD ["flask", "run", "--host=0.0.0.0", "--port=8223"]
+CMD ["python3","app.py"]
