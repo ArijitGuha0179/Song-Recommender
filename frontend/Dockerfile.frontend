@@ -1,26 +1,13 @@
-# Use the official Node.js image as the base image
-FROM node:latest
+FROM node:18-alpine
 
-# Set the working directory
 WORKDIR /app
 
-# Copy the package.json and package-lock.json files
-COPY package*.json ./
+COPY package.json .
 
-# Install dependencies
 RUN npm install
 
-# Copy the entire React app
 COPY . .
 
-# Build the React app
-RUN npm run build
-
-# Use Nginx to serve the built React app
-FROM nginx:latest
-
-# Copy the built React app to Nginx's html folder
-COPY --from=0 /app/build /usr/share/nginx/html
-
-# Expose port 80 for Nginx
 EXPOSE 5173
+
+CMD [ "npm", "run", "dev" ]

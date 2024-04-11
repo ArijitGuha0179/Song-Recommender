@@ -1,5 +1,5 @@
 # Use the official Python image as the base image
-FROM python3:latest
+FROM python:3.11
 
 # Set the working directory
 WORKDIR /app
@@ -13,8 +13,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the entire Flask app
 COPY . .
 
-# Expose the port the Flask app runs on
+# Expose the port you want the Flask app to run on
 EXPOSE 8223
 
-# Start the Flask app
-CMD ["python3", "app.py"]
+# Set environment variables for Flask
+# ENV FLASK_APP=app.py
+# ENV FLASK_ENV=production
+
+# Start the Flask app on the specified port
+CMD ["flask", "run", "--host=0.0.0.0", "--port=8223"]
