@@ -1,9 +1,9 @@
 ### Dataset:
 
-- data.csv: Main dataset containing song information.
-- data_by_genres.csv: Dataset containing genre information.
-- data_by_year.csv: Dataset containing year information.
-- data_by_artist.csv: Dataset containing artist information.
+- ```data.csv```: Main dataset containing song information.
+- ```data_by_genres.csv```: Dataset containing genre information.
+- ```data_by_year.csv```: Dataset containing year information.
+- ```data_by_artist.csv```: Dataset containing artist information.
 - Make sure to place these files in the ```./input``` directory before running the code.
 
 ### Spotify API
@@ -22,10 +22,10 @@
     sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET))
     ```
 ### Utility functions
-- find_song: Retrieves song information from the Spotify API based on the provided song name, year, and artist.
-- get_song_data: Retrieves song information from the local dataset or the Spotify API.
-- get_mean_vector: Calculates the mean vector of a list of songs.
-- flatten_dict_list: Flattens a list of dictionaries into a single dictionary.
+- ```find_song```: Retrieves song information from the Spotify API based on the provided song name, year, and artist.
+- ```get_song_data```: Retrieves song information from the local dataset or the Spotify API.
+- ```get_mean_vector```: Calculates the mean vector of a list of songs.
+- ```flatten_dict_list```: Flattens a list of dictionaries into a single dictionary.
 ### Recommendation function
 
 - This function takes a list of seed songs, the Spotify dataset, and the desired number of recommendations as input. It returns a list of recommended songs based on the seed songs.
@@ -50,7 +50,7 @@ This will print the recommended songs based on the provided seed songs.
 
 The recommendation algorithm works as follows:
 
-- Preprocess the genre and song data using clustering techniques (KMeans) to create clusters of similar songs.
+- Preprocess the genre and song data using **KMeans Clustering Technique** to create clusters of similar songs.
 - For each seed song provided by the user:
    - Retrieve the song information from the local dataset or the Spotify API.
    - Calculate the mean vector of the song features.
