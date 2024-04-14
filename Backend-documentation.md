@@ -26,9 +26,9 @@ JSON object containing the access token on successful login.
 - Request Headers:
 - x-access-token (string): The access token obtained from the login endpoint.
 Request Body:
-    - name (string): The name of the song.
-    - year (integer): The year of the song.
-    - artists (string): The artist(s) of the song.
+    - ```name (string)```: The name of the song.
+    - ```year (integer)```: The year of the song.
+    - ```artists (string)```: The artist(s) of the song.
 - Response:
 JSON array containing the recommended songs.
 4. Logout
@@ -44,8 +44,8 @@ The API uses JWT (JSON Web Tokens) for authentication. To access protected endpo
 #### Error Handling
 The API returns appropriate error responses in case of invalid requests or authentication failures.
 
-- 400 Bad Request: If the request body is missing or invalid.
-- 401 Unauthorized: If the access token is missing or invalid.
+- ```400 Bad Request```: If the request body is missing or invalid.
+- ```401 Unauthorized```: If the access token is missing or invalid.
 
 #### Database
 The API uses an SQLite database (songs.db) to store user information and song recommendations. The database schema consists of two tables:
