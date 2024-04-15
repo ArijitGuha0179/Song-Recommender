@@ -8,11 +8,13 @@ import jwt
 from datetime import datetime, timedelta
 import json
 from flask_cors import CORS
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///songs.db'
-app.config['SECRET_KEY'] = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['WTF_CSRF_ENABLED'] = False
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)

@@ -9,3 +9,4 @@ scikit-learn==1.2.1
 spotipy==2.23.0
 numpy==1.26.4
 flask-cors==4.0.0
+python-dotenv==1.0.1
