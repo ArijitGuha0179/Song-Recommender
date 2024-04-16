@@ -1,3 +1,5 @@
+To install the application, follow the given steps:-
+
 **Step-1 :** First Clone the GitHub repository using the command - 
 ```git clone https://github.com/ArijitGuha0179/Song-Recommender.git```
 
