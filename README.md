@@ -4,10 +4,10 @@ This is a web application that recommends song to users based on inputs that the
 
 ## Documentations
 
-- ![How_to_install](./ArijitGuha_howtoinstall.md)
-- ![How_to_run](./ArijitGuha_howtorun.md)
-- ![Backend_Documentaion](./ArijitGuha_Backend-documentation.md)
-- ![Model_Documentation](./ArijitGuha_Model-documentation.md)
+- [How_to_install](./ArijitGuha_howtoinstall.md)
+- [How_to_run](./ArijitGuha_howtorun.md)
+- [Backend_Documentaion](./ArijitGuha_Backend-documentation.md)
+- [Model_Documentation](./ArijitGuha_Model-documentation.md)
 
 ## Working and Features 
 
