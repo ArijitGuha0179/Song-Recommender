@@ -2,6 +2,13 @@
 
 This is a web application that recommends song to users based on inputs that the users give like the genre of the song they want to listen, they year around which the song was released and the artist they want to listen. The frontend is built with React while the backend is built using Flask. An ML model is built which is the core of our application and the application is also containerized using docker. 
 
+## Documentations
+
+- ![How_to_install](./ArijitGuha_howtoinstall.md)
+- ![How_to_run](./ArijitGuha_howtorun.md)
+- ![Backend_Documentaion](./ArijitGuha_Backend-documentation.md)
+- ![Model_Documentation](./ArijitGuha_Model-documentation.md)
+
 ## Working and Features 
 
 #### Data and Model
