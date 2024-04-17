@@ -1,5 +1,7 @@
 Once the application is installed.Your can run the application by following the steps given below.
 
+NOTE: Before running make sure you are connected to the internet.
+
 **Step-1:** Click on http://localhost:8080/ to open the application on a browser.
 
 ![](./images/archi_4.png)
