@@ -1,6 +1,6 @@
 Once the application is installed.Your can run the application by following the steps given below.
 
-NOTE: Before running make sure you are connected to the internet.
+NOTE: Before running make sure you are connected to the internet.Also, to run the app you need to add your ```CLIENT_ID``` and ```CLIENT_SECRET``` in the file ```model.py``` to get connected to spotify API.To know more you can follow this [link](https://cran.r-project.org/web/packages/spotidy/vignettes/Connecting-with-the-Spotify-API.html#:~:text=Log%20in%20with%20your%20Spotify,unhide%20your%20'Client%20secret'.). 
 
 **Step-1:** Click on http://localhost:8080/ to open the application on a browser.
 
