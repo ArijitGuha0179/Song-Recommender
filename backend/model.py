@@ -35,8 +35,8 @@ song_labels = song_pipeline.predict(X_songs)
 music_data['cluster_label'] = song_labels
 
 # Spotify API credentials
-CLIENT_ID = ""
-CLIENT_SECRET = ""
+CLIENT_ID = "c64c6716a26b451ab6c8d0efcb9954ec"
+CLIENT_SECRET = "1b58055aa6744ed68c9352e9730f6fae"
 
 # Authenticate with the Spotify API
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET))
